@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "daemon",
+  "version": "${version}",
+  "name": "DaemonParticleLib",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/daemon/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "net.me.daemon.client.DaemonDataGenerator"
+    ],
+    "client": [
+      "net.me.daemon.client.DaemonClient"
+    ],
+    "main": [
+      "net.me.daemon.Daemon"
+    ]
+  },
+  "mixins": [
+    "daemon.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

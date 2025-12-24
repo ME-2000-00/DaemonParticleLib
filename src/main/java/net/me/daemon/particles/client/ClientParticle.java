@@ -1,4 +1,4 @@
-package net.me.daemon.particles.client.render;
+package net.me.daemon.particles.client;
 
 import net.me.daemon.particles.networking.ParticleData;
 import net.minecraft.util.math.Vec3d;

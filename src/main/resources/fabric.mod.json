@@ -1,4 +1,4 @@
-{
+]{
   "schemaVersion": 1,
   "id": "daemon",
   "version": "${version}",
@@ -11,13 +11,10 @@
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": [
-      "net.me.daemon.client.DaemonDataGenerator"
     ],
     "client": [
-      "net.me.daemon.client.DaemonClient"
     ],
     "main": [
-      "net.me.daemon.Daemon"
     ]
   },
   "mixins": [

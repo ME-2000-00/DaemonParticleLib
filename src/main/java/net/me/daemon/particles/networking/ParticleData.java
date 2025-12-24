@@ -1,4 +1,4 @@
 package net.me.daemon.particles.networking;
 
-public class ParticleData {
+public interface ParticleData {
 }

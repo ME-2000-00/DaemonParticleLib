@@ -1,4 +1,4 @@
-]{
+{
   "schemaVersion": 1,
   "id": "daemon",
   "version": "${version}",
@@ -13,8 +13,10 @@
     "fabric-datagen": [
     ],
     "client": [
+      "net.me.daemon.MainClient"
     ],
     "main": [
+      "net.me.daemon.Main"
     ]
   },
   "mixins": [

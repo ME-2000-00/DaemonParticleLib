@@ -1,0 +1,35 @@
+package net.me.daemon;
+
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.me.daemon.particles.api.register.DaemonParticleRegistry;
+import net.me.daemon.particles.api.type.defaultparticles.SmokeParticleType;
+import net.me.daemon.particles.client.ClientParticleHandeler;
+import net.me.daemon.particles.util.ClientPayloadReg;
+import net.minecraft.util.Identifier;
+import org.apache.commons.compress.archivers.zip.ScatterZipOutputStream;
+
+import java.io.IOException;
+
+public class MainClient implements ClientModInitializer {
+    SmokeParticleType smoke = null;
+
+    @Override
+    public void onInitializeClient() {
+        ClientPayloadReg.register();
+        ClientParticleHandeler.register();
+
+        // Create your particle type (concrete subclass)
+        ClientTickEvents.START_CLIENT_TICK.register(client -> {
+            try {
+                smoke = new SmokeParticleType(Identifier.of(Main.MOD_ID, "smoke"));
+
+                DaemonParticleRegistry.register(smoke);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+}
+

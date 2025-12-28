@@ -4,8 +4,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.me.daemon.Main;
+import net.me.daemon.particles.api.register.DaemonShaderRegistry;
 import net.me.daemon.particles.api.type.DaemonParticleType;
+import net.me.daemon.particles.util.Utils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.render.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -21,15 +24,17 @@ public class SmokeParticleType extends DaemonParticleType {
 
     @Override
     public void tick(WorldRenderContext context) {
-//            update_uniforms(worldRenderContext, Identifier.of(Main.MOD_ID, "smoke"));
+        update_uniforms(context, Identifier.of(Main.MOD_ID, "smoke"));
+        update_textures();
         matrixStack = context.matrixStack();
         matrixStack.push();
+
     }
 
     @Override
     public void render(WorldRenderContext context) {
         Tessellator tes = Tessellator.getInstance();
-        BufferBuilder buffer = tes.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        BufferBuilder buffer = tes.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
 
         // billboarding
         // matrixStack.multiply(context.camera().getRotation());
@@ -54,19 +59,63 @@ public class SmokeParticleType extends DaemonParticleType {
         Vec3d bottomRight = new Vec3d( 0.5, -0.5, 0);
         Vec3d bottomLeft  = new Vec3d(-0.5, -0.5, 0);
 
-        buffer.vertex(mat, (float) topLeft.x, (float) topLeft.y, (float) topLeft.z).color(255,0,0,255);
-        buffer.vertex(mat, (float) topRight.x, (float) topRight.y, (float) topRight.z).color(255,0,0,255);
-        buffer.vertex(mat, (float) bottomRight.x, (float) bottomRight.y, (float) bottomRight.z).color(255,0,0,255);
-        buffer.vertex(mat, (float) bottomLeft.x, (float) bottomLeft.y, (float) bottomLeft.z).color(255,0,0,255);
+        buffer.vertex(mat, (float) topLeft.x, (float) topLeft.y, (float) topLeft.z)
+                .color(255, 0, 0, 255)
+                .texture(0f, 0f); // top-left UV
+        buffer.vertex(mat, (float) topRight.x, (float) topRight.y, (float) topRight.z)
+                .color(255, 0, 0, 255)
+                .texture(1f, 0f); // top-right UV
+        buffer.vertex(mat, (float) bottomRight.x, (float) bottomRight.y, (float) bottomRight.z)
+                .color(255, 0, 0, 255)
+                .texture(1f, 1f); // bottom-right UV
+        buffer.vertex(mat, (float) bottomLeft.x, (float) bottomLeft.y, (float) bottomLeft.z)
+                .color(255, 0, 0, 255)
+                .texture(0f, 1f); // bottom-left UV
+
 
 
         // We'll get to this bit in the next section.
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 
-        BufferRenderer.drawWithGlobalProgram(buffer.end());
+        // USE CUSTOM SHADER
+        ShaderProgram shader = DaemonShaderRegistry.get(Identifier.of(Main.MOD_ID, "smoke"));
+        shader.bind();
+
+        BufferRenderer.draw(buffer.end());
+
+        shader.unbind();
 
         matrixStack.pop();
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

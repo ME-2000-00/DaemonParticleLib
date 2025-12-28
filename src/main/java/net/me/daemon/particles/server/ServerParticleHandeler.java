@@ -21,13 +21,13 @@ public class ServerParticleHandeler implements ModInitializer{
     public static void spawnParticle(ServerWorld serverWorld, Identifier identifier, Vec3d position) {
 
         if (serverWorld.getPlayers().isEmpty()) {
-            System.out.println("saving particle to que");
+//            System.out.println("saving particle to que");
             QUE.add(new QueParticle(serverWorld, identifier, position));
             return;
         }
 
         serverWorld.getPlayers().forEach(serverPlayerEntity -> {
-            System.out.println("sending out particle to: " + serverPlayerEntity.getName());
+//            System.out.println("sending out particle to: " + serverPlayerEntity.getName());
 
             ServerPlayNetworking.send(serverPlayerEntity, new ParticlePayload(identifier, position));
         });
@@ -37,8 +37,8 @@ public class ServerParticleHandeler implements ModInitializer{
     @Override
     public void onInitialize() {
         ServerPlayerEvents.JOIN.register((serverPlayerEntity -> {
-            System.out.println("sending out que to: " + serverPlayerEntity.getName());
-            System.out.println("que size: " + QUE.size());
+//            System.out.println("sending out que to: " + serverPlayerEntity.getName());
+//            System.out.println("que size: " + QUE.size());
 
             QUE.forEach(queParticle -> {
                 ServerPlayNetworking.send(serverPlayerEntity, new ParticlePayload(queParticle.identifier, queParticle.position));

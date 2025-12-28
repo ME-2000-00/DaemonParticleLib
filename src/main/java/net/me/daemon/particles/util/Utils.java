@@ -4,7 +4,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.me.daemon.Main;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
@@ -51,7 +58,7 @@ public class Utils {
             // textures
             JsonArray textures = json.get("textures").getAsJsonArray();
             for (JsonElement texture : textures) {
-                data.textures.add(Identifier.of(identifier.getNamespace(), texture.getAsString()));
+                data.textures.add(Identifier.of(identifier.getNamespace(), "textures/particle/" + texture.getAsString()));
             }
 
             // velocity
@@ -68,21 +75,13 @@ public class Utils {
         return data;
     }
 
-    public Identifier getShaderFromJson(Identifier identifier) throws IOException {
-        try (InputStream stream = MinecraftClient.getInstance().getResourceManager().open(identifier);
-             InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
-            JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-
-            return Identifier.of(identifier.getNamespace(), json.get("shader_json").getAsString());
-        }
-    }
 
     private static Vec3d getVector3d(JsonObject json, String name) {
         JsonObject  Vector = json.get(name).getAsJsonObject();
         Vec3d vec3 = new Vec3d(
-                Vector.get("x").getAsInt(),
-                Vector.get("y").getAsInt(),
-                Vector.get("z").getAsInt()
+                Vector.get("x").getAsFloat(),
+                Vector.get("y").getAsFloat(),
+                Vector.get("z").getAsFloat()
         );
         return vec3;
     }

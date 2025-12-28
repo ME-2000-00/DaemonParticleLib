@@ -24,8 +24,9 @@ public class ClientParticleHandeler {
 
 
     public static void register() {
-        WorldRenderEvents.END.register(worldRenderContext -> {
-
+        WorldRenderEvents.AFTER_TRANSLUCENT.register(worldRenderContext -> {
+            // TODO: there is an issue where there are to may particles even tho only one was added
+            System.out.println("[CLIENT]: particle array size: " + PARTICLES.size());
 
             PARTICLES.forEach(daemonParticleType -> {
 
@@ -40,9 +41,8 @@ public class ClientParticleHandeler {
                     // TODO: IF ONLY TEMPORARY NEEDS A PROPER FIX IN THE FUTURE
                     // if statement prevents particletypes that are null from being used since the server sends a payload before the json has been loaded
 
-                    if (DaemonParticleRegistry.get(particlePayload.id()) != null) {
-                        addParticle(particlePayload.id(), particlePayload.position());
-                    }
+                    System.out.println("[CLIENT]: recv particle data");
+                    addParticle(particlePayload.id(), particlePayload.position());
                 });
             }));
         });
@@ -56,6 +56,12 @@ public class ClientParticleHandeler {
     public static void addParticle(Identifier identifier, Vec3d position) {
         DaemonParticleType particleType = DaemonParticleRegistry.get(identifier);
         particleType.setPosition(position);
+        System.out.println("[CLIENT]: added particle: ");
+        System.out.println("[CLIENT]: " + particleType.id.getPath() + "\n");
+        System.out.println("[CLIENT]: " + particleType.position.x + "\n");
+        System.out.println("[CLIENT]: " + particleType.position.y + "\n");
+        System.out.println("[CLIENT]: " + particleType.position.z + "\n");
+
 
         PARTICLES.add(particleType);
     }

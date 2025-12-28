@@ -16,6 +16,7 @@
       "net.me.daemon.MainClient"
     ],
     "main": [
+      "net.me.daemon.particles.server.ServerParticleHandeler",
       "net.me.daemon.Main"
     ]
   },

@@ -5,8 +5,10 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.me.daemon.particles.api.register.DaemonShaderRegistry;
 import net.me.daemon.particles.util.Utils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -51,9 +53,26 @@ public abstract class DaemonParticleType {
         Objects.requireNonNull(program.getUniform("ModelViewMat")).set(context.positionMatrix());
     }
 
-    public void update_textures() {
+    public void set_texture(int index) {
         RenderSystem.activeTexture(GL13.GL_TEXTURE0);
-        client.getTextureManager().bindTexture(textures.get(0));
+        client.getTextureManager().bindTexture(textures.get(index));
+    }
+
+    /// 0 = screen texture   1 = depth texture
+    public void set_screen_texture(int type) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        Framebuffer buffer = client.getFramebuffer();
+        int texID;
+
+        switch (type) {
+            case 0 -> texID = buffer.getColorAttachment();
+            case 1 -> texID = buffer.getDepthAttachment();
+            default -> texID = buffer.getColorAttachment();
+        }
+
+
+        RenderSystem.activeTexture(GL13.GL_TEXTURE0);
+        RenderSystem.bindTexture(texID);
     }
 
     public void setPosition(Vec3d pos) {
@@ -83,8 +102,10 @@ public abstract class DaemonParticleType {
 
     public void TrueRender(WorldRenderContext context) {
         RenderSystem.disableCull();
+        RenderSystem.enableDepthTest();
         render(context);
         RenderSystem.enableCull();
+        RenderSystem.disableDepthTest();
     }
 
 

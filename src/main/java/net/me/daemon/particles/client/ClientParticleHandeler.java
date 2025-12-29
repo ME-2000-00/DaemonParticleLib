@@ -1,21 +1,16 @@
 package net.me.daemon.particles.client;
 
-import com.sun.jna.platform.win32.OaIdl;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.me.daemon.particles.api.register.DaemonParticleRegistry;
 import net.me.daemon.particles.api.type.DaemonParticleType;
 import net.me.daemon.particles.util.ParticlePayload;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ClientParticleHandeler {
 
@@ -25,7 +20,7 @@ public class ClientParticleHandeler {
 
 
     public static void register() {
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(worldRenderContext -> {
+        WorldRenderEvents.END.register(worldRenderContext -> {
             // TODO: there is an issue where there are to may particles even tho only one was added
 //            System.out.println("[CLIENT]: particle array size: " + PARTICLES.size());
 
@@ -38,6 +33,7 @@ public class ClientParticleHandeler {
                 // deleting if markedForDeath
                 PARTICLES.removeIf(DaemonParticleType::markedForDeath);
             }
+
         });
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {

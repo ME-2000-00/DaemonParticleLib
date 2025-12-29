@@ -1,5 +1,5 @@
 {
-  "lifetime" : 400,
+  "lifetime" : 9999999,
   "position" : {
     "x" : 0.0,
     "y" : 1.0,

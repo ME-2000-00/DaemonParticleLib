@@ -41,8 +41,6 @@ public class ClientParticleHandeler {
                 context.client().execute(() -> {
                     // should be safe for now,
                     // in earlier version had issue that particle id was null and made client crash
-
-//                    System.out.println("[CLIENT]: recv particle data");
                     addParticle(particlePayload.id(), particlePayload.position());
                 });
             }));

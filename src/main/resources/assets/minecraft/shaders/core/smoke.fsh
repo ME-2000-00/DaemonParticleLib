@@ -15,7 +15,7 @@ void main() {
 //    uv.y = 1.0 - uv.y;
 //    uv.x = 1.0 - uv.x;
 
-    vec4 color = texture(Sampler0, uv);
+    vec4 color = texture(Sampler0, texCoord0);
     if (color.a == 0.0) {
         discard;
     }
@@ -23,5 +23,5 @@ void main() {
     fragColor = color * ColorModulator;
 
     // depth texture
-    // fragColor = vec4(vec3(color.r / 10), 1.0) * ColorModulator;
+    // fragColor = vec4(vec3(color.r), 1.0) * ColorModulator;
 }

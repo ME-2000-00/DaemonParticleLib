@@ -21,7 +21,7 @@ public class ModCommands {
 
     private static int test(CommandContext<ServerCommandSource> context) {
         ServerWorld serverWorld = context.getSource().getWorld();
-        ServerParticleHandeler.spawnParticle(serverWorld , Identifier.of(Main.MOD_ID, "smoke"), new Vec3d(0, 61 ,0));
+        ServerParticleHandeler.spawnParticle(serverWorld , Identifier.of(Main.MOD_ID, "smoke"), context.getSource().getPlayer().getPos());
 
             return 1;
     }

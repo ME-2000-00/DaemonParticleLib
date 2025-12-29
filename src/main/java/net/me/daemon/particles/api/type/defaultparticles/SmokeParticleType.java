@@ -25,8 +25,9 @@ public class SmokeParticleType extends DaemonParticleType {
     @Override
     public void tick(WorldRenderContext context) {
         update_uniforms(context, Identifier.of(Main.MOD_ID, "smoke"));
-//        set_texture(0);
-        set_screen_texture(0);
+        set_texture(0);
+
+//        set_screen_texture(0);
         matrixStack = context.matrixStack();
         matrixStack.push();
 
@@ -37,28 +38,28 @@ public class SmokeParticleType extends DaemonParticleType {
         Tessellator tes = Tessellator.getInstance();
         BufferBuilder buffer = tes.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
 
-        // billboarding
-        // matrixStack.multiply(context.camera().getRotation());
-
-        Matrix4f mat = matrixStack.peek().getPositionMatrix();
         Vec3d camPos = context.camera().getPos();
+
 
         // TODO: find out why fps drop a lot when your too close to the particle
         double distSq = camPos.squaredDistanceTo(position);
 
-        if (distSq < 0.25) return; // too close (0.5 blocks)
-        if (distSq > 256) return;  // too far (16 blocks)
-
-        mat.translate(
+        matrixStack.translate(
                 (float) (position.x - camPos.x) + 0.5f,
                 (float) (position.y - camPos.y) + 0.5f,
                 (float) (position.z - camPos.z) + 0.5f
         );
 
-        Vec3d topLeft     = new Vec3d(-0.5,  0.5, 0);
+        // billboarding
+        matrixStack.multiply(context.camera().getRotation());
+        matrixStack.scale(3,3,3); // scale the particle
+
+        Matrix4f mat = matrixStack.peek().getPositionMatrix();
+
+        Vec3d topLeft     = new Vec3d( -0.5, 0.5, 0);
         Vec3d topRight    = new Vec3d( 0.5,  0.5, 0);
         Vec3d bottomRight = new Vec3d( 0.5, -0.5, 0);
-        Vec3d bottomLeft  = new Vec3d(-0.5, -0.5, 0);
+        Vec3d bottomLeft  = new Vec3d( -0.5,-0.5, 0);
 
         buffer.vertex(mat, (float) topLeft.x, (float) topLeft.y, (float) topLeft.z)
                 .color(255, 0, 0, 255)

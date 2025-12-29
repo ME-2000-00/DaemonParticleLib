@@ -25,7 +25,8 @@ public class SmokeParticleType extends DaemonParticleType {
     @Override
     public void tick(WorldRenderContext context) {
         update_uniforms(context, Identifier.of(Main.MOD_ID, "smoke"));
-        update_textures();
+//        set_texture(0);
+        set_screen_texture(0);
         matrixStack = context.matrixStack();
         matrixStack.push();
 

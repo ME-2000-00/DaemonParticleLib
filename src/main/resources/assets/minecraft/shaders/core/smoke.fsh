@@ -12,8 +12,6 @@ out vec4 fragColor;
 
 void main() {
     vec2 uv = vec2(1.0) - texCoord0;
-//    uv.y = 1.0 - uv.y;
-//    uv.x = 1.0 - uv.x;
 
     vec4 color = texture(Sampler0, texCoord0);
     if (color.a == 0.0) {

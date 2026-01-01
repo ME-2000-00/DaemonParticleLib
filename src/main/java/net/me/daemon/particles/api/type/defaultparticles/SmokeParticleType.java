@@ -2,7 +2,6 @@ package net.me.daemon.particles.api.type.defaultparticles;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.me.daemon.Main;
 import net.me.daemon.particles.api.register.DaemonShaderRegistry;
 import net.me.daemon.particles.api.type.DaemonParticleType;
